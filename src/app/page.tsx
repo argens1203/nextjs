@@ -1,89 +1,86 @@
-import Image from 'next/image';
-import { ButtonWithArrow, Link } from './components';
+import { DateTime } from 'luxon';
 
-export default function Home() {
+type Blog = {
+    title: string;
+    content: string[];
+    createdAt: DateTime;
+    lastUpdatedAt: DateTime;
+};
+
+const BLOGS = [
+    {
+        title: 'NextJS Day 1',
+        content: [
+            <>
+                {
+                    'NextJS uses a folder based routing, and thus a nested folder by default has a one-to-one mapping with a nested route. The page rendered at any level is equal to the overlay of page.{js, ts, jsx, tsx} over all layout.{js, ts, jsx, tsx} of all the subsequent parent routes.'
+                }
+            </>,
+            <>
+                To bypass this mechanism, there are also <b>Dynamic Routes</b>,
+                which reuses same layout / page for an array of similar
+                contents, and <b>Route Groups</b>, which reuses layout for
+                virtual parent path.
+            </>,
+            <>
+                For example, folder structure a/(b)/c could map to a/c, with b
+                being a logical placeholder or a place for common layout.
+            </>,
+        ],
+        createdAt: DateTime.utc(2023, 7, 5, 14, 44, 30).setZone(
+            'Asia/Hong_Kong'
+        ),
+        lastUpdatedAt: DateTime.utc(2023, 7, 5, 14, 44, 30).setZone(
+            'Asia/Hong_Kong'
+        ),
+    },
+    {
+        title: 'On Writing Well',
+        content: [
+            <>
+                A very interesting book with a relativel simple premise. Cut the
+                slack. At least that's what it was all about in the first 4
+                chapters. In that sense, it was ironic. Starting there, it
+                allows (todo: better word) the reader to add back their personal
+                flavor.
+            </>,
+        ],
+        createdAt: DateTime.utc(2023, 7, 5, 15, 0, 10).setZone(
+            'Asia/Hong_Kong'
+        ),
+        lastUpdatedAt: DateTime.utc(2023, 7, 5, 15, 0, 10).setZone(
+            'Asia/Hong_Kong'
+        ),
+    },
+];
+
+function Blog({ blog }: { blog: Blog }) {
+    const { title, content, lastUpdatedAt } = blog;
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-                <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-                    Get started by editing&nbsp;
-                    <code className="font-mono font-bold">
-                        src/app/page.tsx
-                    </code>
-                </p>
-                <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-                    <a
-                        className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        By{' '}
-                        <Image
-                            src="/vercel.svg"
-                            alt="Vercel Logo"
-                            className="dark:invert"
-                            width={100}
-                            height={24}
-                            priority
-                        />
-                    </a>
+        <div className="p-3 border-b-2">
+            <div className="flex flex-row justify-between w-full p-3">
+                <div>{title}</div>
+                <div>
+                    {lastUpdatedAt
+                        .setLocale('zh-tw')
+                        .toLocaleString(DateTime.DATETIME_SHORT)}
                 </div>
             </div>
-
-            <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-                <Image
-                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-                    src="/next.svg"
-                    alt="Next.js Logo"
-                    width={180}
-                    height={37}
-                    priority
-                />
+            <div>
+                {content.map((c) => (
+                    <p className="pb-3">{c}</p>
+                ))}
             </div>
+        </div>
+    );
+}
 
-            <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-                <Link
-                    to={
-                        'https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-                    }
-                >
-                    <ButtonWithArrow
-                        title={'Docs'}
-                        text=" Find in-depth information about Next.js features and API."
-                    />
-                </Link>
-                <Link
-                    to={
-                        'https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-                    }
-                >
-                    <ButtonWithArrow
-                        title={'Learn'}
-                        text="Learn about Next.js in an interactive course with&nbsp;quizzes!"
-                    />
-                </Link>
-                <Link
-                    to={
-                        'https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-                    }
-                >
-                    <ButtonWithArrow
-                        title={'Templates'}
-                        text="Explore the Next.js 13 playground."
-                    />
-                </Link>
-                <Link
-                    to={
-                        'https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-                    }
-                >
-                    <ButtonWithArrow
-                        title={'Deploy'}
-                        text="Instantly deploy your Next.js site to a shareable URL with Vercel."
-                    />
-                </Link>
-            </div>
-        </main>
+export default function Bal() {
+    return (
+        <div>
+            {BLOGS.map((blog) => (
+                <Blog blog={blog} />
+            ))}
+        </div>
     );
 }
