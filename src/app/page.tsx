@@ -40,13 +40,6 @@ export default function Bal() {
     }, []);
     return (
         <div>
-            <button
-                onClick={() => {
-                    addBlog('Title', ['content1', 'content2']);
-                }}
-            >
-                hello
-            </button>
             <div>
                 {blogs.map((blog: BlogT, idx) => (
                     <Blog key={idx} blog={blog} />
