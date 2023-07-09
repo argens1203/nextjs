@@ -1,5 +1,4 @@
-'use client';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement } from 'react';
 import { DateTime } from 'luxon';
 import { db } from './firestore.init';
 import {
@@ -11,20 +10,15 @@ import {
     limit,
     addDoc,
 } from 'firebase/firestore/lite';
+import { Blog } from '@/entities/blog.entity';
 
-class Blog {
-    title: string = '';
-    content: ReactElement[] = [];
-    createdAt: DateTime = DateTime.now();
-    lastUpdatedAt: DateTime = DateTime.now();
-}
-
-export async function getBlogs() {
+export async function getBlogs(): Promise<Blog[]> {
     const blogRef = collection(db, 'blog');
     const q = query(blogRef, orderBy('createdAt', 'desc'), limit(3));
     const docs = await getDocs(q);
     return docs.docs.map((d) => ({
-        ...d.data(),
+        title: d.data().title,
+        content: d.data().content,
         createdAt: DateTime.fromJSDate(d.data().createdAt.toDate()),
         lastUpdatedAt: DateTime.fromJSDate(d.data().createdAt.toDate()),
         id: d.id,

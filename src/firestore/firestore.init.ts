@@ -1,4 +1,3 @@
-'use client';
 // ------ Start: Copied From Firebase ------ //
 
 // Import the functions you need from the SDKs you need
