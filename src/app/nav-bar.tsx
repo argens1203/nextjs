@@ -17,6 +17,7 @@ export function NavBar() {
         <ul className="m-3">
             <Entry href={'/'} text={'All Blogs'} />
             <Entry href={'/add'} text={'New Blog'} />
+            <Entry href={'/markdown'} text={'Markdown'} />
         </ul>
     );
 }
