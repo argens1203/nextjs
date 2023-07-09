@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { NavBar } from './nav-bar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,7 +26,7 @@ export default function RootLayout({
                     </div>
                     <div className="relative flex flex-row flex-1 w-full">
                         <div className="align-self-start bg-black text-white">
-                            nav bar
+                            <NavBar />
                         </div>
                         <div className="flex-1">{children}</div>
                     </div>

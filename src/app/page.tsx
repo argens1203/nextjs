@@ -1,60 +1,16 @@
+'use client';
+import { serverTimestamp } from 'firebase/firestore/lite';
 import { DateTime } from 'luxon';
-
-type Blog = {
+import { ReactElement, useEffect, useState } from 'react';
+import { addBlog, getBlogs } from './firestore/blog';
+type BlogT = {
     title: string;
-    content: string[];
+    content: ReactElement[];
     createdAt: DateTime;
     lastUpdatedAt: DateTime;
 };
 
-const BLOGS = [
-    {
-        title: 'NextJS Day 1',
-        content: [
-            <>
-                {
-                    'NextJS uses a folder based routing, and thus a nested folder by default has a one-to-one mapping with a nested route. The page rendered at any level is equal to the overlay of page.{js, ts, jsx, tsx} over all layout.{js, ts, jsx, tsx} of all the subsequent parent routes.'
-                }
-            </>,
-            <>
-                To bypass this mechanism, there are also <b>Dynamic Routes</b>,
-                which reuses same layout / page for an array of similar
-                contents, and <b>Route Groups</b>, which reuses layout for
-                virtual parent path.
-            </>,
-            <>
-                For example, folder structure a/(b)/c could map to a/c, with b
-                being a logical placeholder or a place for common layout.
-            </>,
-        ],
-        createdAt: DateTime.utc(2023, 7, 5, 14, 44, 30).setZone(
-            'Asia/Hong_Kong'
-        ),
-        lastUpdatedAt: DateTime.utc(2023, 7, 5, 14, 44, 30).setZone(
-            'Asia/Hong_Kong'
-        ),
-    },
-    {
-        title: 'On Writing Well',
-        content: [
-            <>
-                A very interesting book with a relativel simple premise. Cut the
-                slack. At least that's what it was all about in the first 4
-                chapters. In that sense, it was ironic. Starting there, it
-                allows (todo: better word) the reader to add back their personal
-                flavor.
-            </>,
-        ],
-        createdAt: DateTime.utc(2023, 7, 5, 15, 0, 10).setZone(
-            'Asia/Hong_Kong'
-        ),
-        lastUpdatedAt: DateTime.utc(2023, 7, 5, 15, 0, 10).setZone(
-            'Asia/Hong_Kong'
-        ),
-    },
-];
-
-function Blog({ blog }: { blog: Blog }) {
+function Blog({ blog }: { blog: BlogT }) {
     const { title, content, lastUpdatedAt } = blog;
     return (
         <div className="p-3 border-b-2">
@@ -67,8 +23,10 @@ function Blog({ blog }: { blog: Blog }) {
                 </div>
             </div>
             <div>
-                {content.map((c) => (
-                    <p className="pb-3">{c}</p>
+                {content.map((c, idx) => (
+                    <p key={idx} className="pb-3">
+                        {c}
+                    </p>
                 ))}
             </div>
         </div>
@@ -76,11 +34,24 @@ function Blog({ blog }: { blog: Blog }) {
 }
 
 export default function Bal() {
+    const [blogs, setBlogs] = useState<BlogT[]>([]);
+    useEffect(() => {
+        getBlogs().then(setBlogs);
+    }, []);
     return (
         <div>
-            {BLOGS.map((blog) => (
-                <Blog blog={blog} />
-            ))}
+            <button
+                onClick={() => {
+                    addBlog('Title', ['content1', 'content2']);
+                }}
+            >
+                hello
+            </button>
+            <div>
+                {blogs.map((blog: BlogT, idx) => (
+                    <Blog key={idx} blog={blog} />
+                ))}
+            </div>
         </div>
     );
 }
