@@ -12,6 +12,8 @@ import {
     QueryDocumentSnapshot,
     updateDoc,
     doc,
+    where,
+    getDoc,
 } from 'firebase/firestore/lite';
 import { Blog } from '@/entities/blog.entity';
 
@@ -23,6 +25,12 @@ export const getBlogs = cache(async () => {
     )
         .then((temp) => temp.docs.map((s) => s.data()))
         .catch(() => []);
+});
+
+export const getBlog = cache(async (id: string) => {
+    console.log('Getting Blog: ' + id);
+    const docRef = doc(db, 'blog', id).withConverter(blogConverter);
+    return await getDoc(docRef).then((snapShot) => snapShot.data());
 });
 
 export async function addBlog(title: string, content: string) {

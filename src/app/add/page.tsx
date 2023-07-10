@@ -1,16 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { addBlog } from '../../firestore/blog';
-import { MarkdownWithPreview } from '../markdown/markdown-with-preview';
+import { BlogEditable } from '../blog-editable';
 
 export default function AddPage() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const submit = () => {
-        // const trimmedContent = content
-        //     .split('\n')
-        //     .filter((s) => !!s)
-        //     .map((s) => s.trim());
         addBlog(title, content).then(() => {
             console.log('Ended');
             setTitle('');
@@ -28,18 +24,12 @@ export default function AddPage() {
                     Submit
                 </button>
             </div>
-            <div className="p-2">
-                <p>Title</p>
-                <input
-                    className="w-full"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-            </div>
-            <div className="p-2">
-                <p>Content</p>
-                <MarkdownWithPreview value={content} setValue={setContent} />
-            </div>
+            <BlogEditable
+                title={title}
+                content={content}
+                onTitleChange={setTitle}
+                onContentChange={setContent}
+            />
         </div>
     );
 }

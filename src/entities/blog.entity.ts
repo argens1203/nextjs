@@ -3,8 +3,9 @@ import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore/lite';
 
 export class Blog {
     constructor(input: Partial<Blog> = {}) {
-        return { ...this, ...input };
+        return Object.assign(this, input);
     }
+
     id: string = '';
     title: string = '';
     content: string = '';
@@ -29,5 +30,14 @@ export class Blog {
             lastUpdatedAt: DateTime.fromJSDate(data.lastUpdatedAt.toDate()),
             id,
         });
+    }
+
+    toSerializable() {
+        const { id, title, content } = this;
+        return {
+            id,
+            title,
+            content,
+        };
     }
 }
