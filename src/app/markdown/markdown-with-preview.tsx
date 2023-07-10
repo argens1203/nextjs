@@ -13,6 +13,7 @@ export function MarkdownWithPreview(props: Props) {
         <div className="flex flex-row">
             <div className="flex-1 p-2">
                 <textarea
+                    rows={5}
                     className="w-full"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
