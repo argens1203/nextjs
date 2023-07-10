@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 export function BlogElement({ blog }: { blog: Blog }) {
     const { title, content, lastUpdatedAt, createdAt, id } = blog;
-    console.log(id);
     return (
         <div
             className="p-3 border-b-2
