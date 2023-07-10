@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { NavBar } from './nav-bar';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +29,9 @@ export default function RootLayout({
                         <div className="align-self-start bg-black text-white">
                             <NavBar />
                         </div>
-                        <div className="flex-1">{children}</div>
+                        <div className="flex-1">
+                            <Suspense fallback={'Loading'}>{children}</Suspense>
+                        </div>
                     </div>
                 </div>
             </body>

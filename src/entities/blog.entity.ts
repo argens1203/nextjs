@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { DateTime } from 'luxon';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore/lite';
 
@@ -8,7 +7,7 @@ export class Blog {
     }
     id: string = '';
     title: string = '';
-    content: ReactElement[] = [];
+    content: string = '';
     createdAt: DateTime = DateTime.now();
     lastUpdatedAt: DateTime = DateTime.now();
 
@@ -18,10 +17,14 @@ export class Blog {
 
     static fromSnapshot(snapshot: QueryDocumentSnapshot): Blog {
         const id = snapshot.id;
-        const data = snapshot.data()!;
+        const data = snapshot.data();
+        const content =
+            typeof data.content === 'string'
+                ? data.content
+                : data.content.join('\n');
         return new Blog({
             title: data.title,
-            content: data.content,
+            content,
             createdAt: DateTime.fromJSDate(data.createdAt.toDate()),
             lastUpdatedAt: DateTime.fromJSDate(data.lastUpdatedAt.toDate()),
             id,

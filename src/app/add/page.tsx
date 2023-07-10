@@ -1,16 +1,17 @@
 'use client';
 import { useState } from 'react';
 import { addBlog } from '../../firestore/blog';
+import { MarkdownWithPreview } from '../markdown/markdown-with-preview';
 
 export default function AddPage() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const submit = () => {
-        const trimmedContent = content
-            .split('\n')
-            .filter((s) => !!s)
-            .map((s) => s.trim());
-        addBlog(title, trimmedContent).then(() => {
+        // const trimmedContent = content
+        //     .split('\n')
+        //     .filter((s) => !!s)
+        //     .map((s) => s.trim());
+        addBlog(title, content).then(() => {
             console.log('Ended');
             setTitle('');
             setContent('');
@@ -37,12 +38,7 @@ export default function AddPage() {
             </div>
             <div className="p-2">
                 <p>Content</p>
-                <textarea
-                    rows={5}
-                    value={content}
-                    className="w-full"
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                <MarkdownWithPreview value={content} setValue={setContent} />
             </div>
         </div>
     );

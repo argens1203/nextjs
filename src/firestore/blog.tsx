@@ -1,5 +1,4 @@
-import { ReactElement } from 'react';
-import { DateTime } from 'luxon';
+import { cache } from 'react';
 import { db } from './firestore.init';
 import {
     collection,
@@ -11,18 +10,23 @@ import {
     addDoc,
     DocumentData,
     QueryDocumentSnapshot,
+    updateDoc,
+    doc,
 } from 'firebase/firestore/lite';
 import { Blog } from '@/entities/blog.entity';
 
-export async function getBlogs(): Promise<Blog[]> {
+export const getBlogs = cache(async () => {
+    console.log('Getting Blogs');
     const blogRef = collection(db, 'blog').withConverter(blogConverter);
-    const temp = await getDocs(
-        query(blogRef, orderBy('createdAt', 'desc'), limit(3))
-    );
-    return temp.docs.map((s) => s.data());
-}
+    return await getDocs(
+        query(blogRef, orderBy('createdAt', 'desc'), limit(30))
+    )
+        .then((temp) => temp.docs.map((s) => s.data()))
+        .catch(() => []);
+});
 
-export async function addBlog(title: string, content: string[]) {
+export async function addBlog(title: string, content: string) {
+    console.log('Adding Blogs');
     const blogRef = collection(db, 'blog');
     return await addDoc(blogRef, {
         title,
@@ -33,7 +37,12 @@ export async function addBlog(title: string, content: string[]) {
 }
 
 export async function editBlog(id: string, updates: Partial<Blog>) {
-    throw new Error('Not Implemented');
+    console.log('Editing Blogs');
+    const blogRef = collection(db, 'blog').withConverter(blogConverter);
+    return await updateDoc(doc(blogRef, id), {
+        ...updates,
+        lastUpdatedAt: serverTimestamp(),
+    });
 }
 
 const blogConverter = {
