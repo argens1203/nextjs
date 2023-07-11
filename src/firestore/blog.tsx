@@ -14,6 +14,7 @@ import {
     doc,
     where,
     getDoc,
+    deleteDoc,
 } from 'firebase/firestore/lite';
 import { Blog } from '@/entities/blog.entity';
 
@@ -51,6 +52,11 @@ export async function editBlog(id: string, updates: Partial<Blog>) {
         ...updates,
         lastUpdatedAt: serverTimestamp(),
     });
+}
+
+export async function deleteBlog(id: string) {
+    console.log('Adding Blogs');
+    return await deleteDoc(doc(db, 'blog', id));
 }
 
 const blogConverter = {
