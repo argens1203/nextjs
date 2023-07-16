@@ -1,5 +1,6 @@
 'use client';
-import { MarkdownWithPreview } from './markdown/markdown-with-preview';
+
+import { MarkdownWithPreview } from '../markdown';
 
 type Props = {
     title: string;

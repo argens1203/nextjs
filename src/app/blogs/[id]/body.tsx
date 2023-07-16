@@ -1,6 +1,6 @@
 'use client';
 
-import { BlogEditable } from '@/app/blog-editable';
+import { BlogEditable } from '@/components/blog';
 import { editBlog } from '@/firestore/blog';
 import { useState } from 'react';
 

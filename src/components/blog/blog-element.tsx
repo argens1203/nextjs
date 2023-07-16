@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon';
-import { Blog } from '@/entities/blog.entity';
-import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import React from 'react';
 import Link from 'next/link';
-import { MenuButton } from './menu-button';
+
+import { Blog } from '@/entities/blog.entity';
+import { MenuButton } from './blog-action-button';
+import { Markdown } from '../markdown';
 
 export function BlogElement({ blog }: { blog: Blog }) {
     const { title, content, lastUpdatedAt, createdAt, id } = blog;
@@ -38,7 +39,7 @@ export function BlogElement({ blog }: { blog: Blog }) {
                     </div>
                 </div>
                 <div>
-                    <ReactMarkdown>{content}</ReactMarkdown>
+                    <Markdown>{content}</Markdown>
                 </div>
             </Link>
             <MenuButton id={id} />

@@ -1,6 +1,6 @@
 import { Blog } from '@/entities/blog.entity';
 import { getBlogs } from '../firestore/blog';
-import { BlogElement } from './blog-element';
+import { BlogElement } from '../components/blog/blog-element';
 
 export default async function Bal() {
     const blogs = await getBlogs();

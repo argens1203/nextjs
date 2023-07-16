@@ -4,6 +4,7 @@ type Props = {
     href: string;
     text: string;
 };
+
 function Entry({ href, text }: Props) {
     return (
         <li className="pb-3 pt-2">

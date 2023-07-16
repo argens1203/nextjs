@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
+
 import { addBlog } from '../../firestore/blog';
-import { BlogEditable } from '../blog-editable';
+import { BlogEditable } from '../../components/blog';
 
 export default function AddPage() {
     const [title, setTitle] = useState('');

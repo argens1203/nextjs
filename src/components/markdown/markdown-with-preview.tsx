@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+
+import { Markdown } from './markdown-viewer';
 
 type Props = {
     value: string;
@@ -20,7 +20,7 @@ export function MarkdownWithPreview(props: Props) {
                 />
             </div>
             <div className="flex-1 p-2">
-                <ReactMarkdown>{value}</ReactMarkdown>
+                <Markdown>{value}</Markdown>
             </div>
         </div>
     );
