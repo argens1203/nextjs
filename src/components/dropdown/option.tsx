@@ -1,31 +1,37 @@
+'use client';
+
 import React, { useContext } from 'react';
 import { SelectContext } from './select-context';
 import { useListItem } from '@floating-ui/react';
 
-type Props = { label: string };
+type Props = { label: string; onClick: () => void };
 
 export function Option(props: Props) {
-    const { label } = props;
-    const { activeIndex, selectedIndex, getItemProps, handleSelect } =
-        useContext(SelectContext);
-
-    const { ref, index } = useListItem({ label });
+    const { label, onClick } = props;
+    const { activeIndex, getItemProps, closeMenu } = useContext(SelectContext);
+    const { ref, index } = useListItem();
 
     const isActive = activeIndex === index;
-    const isSelected = selectedIndex === index;
+
+    if (!getItemProps) {
+        return null;
+    }
 
     return (
         <button
             ref={ref}
             role="option"
-            aria-selected={isActive && isSelected}
+            aria-selected={isActive}
             tabIndex={isActive ? 0 : -1}
             style={{
                 background: isActive ? 'cyan' : '',
-                fontWeight: isSelected ? 'bold' : '',
+                // fontWeight: isSelected ? 'bold' : '',
             }}
             {...getItemProps({
-                onClick: () => handleSelect(index),
+                onClick: () => {
+                    closeMenu();
+                    onClick();
+                },
             })}
         >
             {label}

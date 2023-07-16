@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { SelectContext } from './select-context';
 import {
@@ -15,6 +17,9 @@ import {
 } from '@floating-ui/react';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
 
+import './dropdown.css';
+import { ThreeDot } from '../icon/three-dot';
+
 type Props = { children: ReactElement };
 
 export function Select(props: Props) {
@@ -22,8 +27,6 @@ export function Select(props: Props) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState<null | number>(null);
-    const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
-    const [selectedLabel, setSelectedLabel] = useState<null | number>(null);
 
     const { refs, floatingStyles, context } = useFloating({
         placement: 'bottom-start',
@@ -36,55 +39,36 @@ export function Select(props: Props) {
     const elementsRef = useRef([]);
     const labelsRef = useRef([]);
 
-    const handleSelect = useCallback((index: number | null) => {
-        setSelectedIndex(index);
-        setIsOpen(false);
-        if (index !== null) {
-            setSelectedLabel(labelsRef.current[index]);
-        }
-    }, []);
-
-    function handleTypeaheadMatch(index: number) {
-        if (isOpen) {
-            setActiveIndex(index);
-        } else {
-            handleSelect(index);
-        }
-    }
-
     const listNav = useListNavigation(context, {
         listRef: elementsRef,
         activeIndex,
-        selectedIndex,
         onNavigate: setActiveIndex,
-    });
-    const typeahead = useTypeahead(context, {
-        listRef: labelsRef,
-        activeIndex,
-        selectedIndex,
-        onMatch: handleTypeaheadMatch,
     });
     const click = useClick(context);
     const dismiss = useDismiss(context);
     const role = useRole(context, { role: 'listbox' });
 
     const { getReferenceProps, getFloatingProps, getItemProps } =
-        useInteractions([listNav, typeahead, click, dismiss, role]);
+        useInteractions([listNav, click, dismiss, role]);
 
     const selectContext = useMemo(
         () => ({
             activeIndex,
-            selectedIndex,
             getItemProps,
-            handleSelect,
+            closeMenu: () => setIsOpen(false),
         }),
-        [activeIndex, selectedIndex, getItemProps, handleSelect]
+        [activeIndex, getItemProps, setIsOpen]
     );
 
     return (
         <>
-            <div ref={refs.setReference} tabIndex={0} {...getReferenceProps()}>
-                {selectedLabel ?? 'Select...'}
+            <div
+                ref={refs.setReference}
+                tabIndex={0}
+                {...getReferenceProps()}
+                style={{ alignItems: 'center' }}
+            >
+                <ThreeDot />
             </div>
             <SelectContext.Provider value={selectContext}>
                 {isOpen && (
