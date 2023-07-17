@@ -3,9 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import { Blog } from '@/entities/blog.entity';
-import { MenuButton } from './blog-action-button';
 import { Markdown } from '../markdown';
-import { BlogCheckbox } from './blog-checkbox';
 
 export function BlogElement({ blog }: { blog: Blog }) {
     const { title, content, lastUpdatedAt, createdAt, id } = blog;
@@ -15,7 +13,6 @@ export function BlogElement({ blog }: { blog: Blog }) {
             flex flex-row
             p-3 border-b-2"
         >
-            <BlogCheckbox id={id} />
             <Link
                 href={`/blogs/${id}`}
                 className="
@@ -44,7 +41,6 @@ export function BlogElement({ blog }: { blog: Blog }) {
                     <Markdown>{content}</Markdown>
                 </div>
             </Link>
-            <MenuButton id={id} />
         </div>
     );
 }

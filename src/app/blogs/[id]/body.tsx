@@ -2,8 +2,7 @@
 
 import { BlogEditable } from '@/components/blog';
 import { editBlog } from '@/firestore/blog';
-import { migrateFromBlog } from '@/firestore/topic';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../button';
 
 type Props = {
@@ -30,32 +29,18 @@ export function BlogPageBody(props: Props) {
         });
     };
 
-    const moveToTag = useCallback(() => {
-        setMoving(true);
-        migrateFromBlog(id)
-            .catch(console.log)
-            .finally(() => {
-                setMoving(false);
-            });
-    }, []);
-
     return (
         <div>
-            <Button
-                onClick={update}
-                disabled={updating}
-                label={updating ? 'Updating' : 'Update'}
-            />
-            <Button
-                onClick={moveToTag}
-                disabled={moving}
-                label={moving ? 'Moving' : 'Move'}
-            />
             <BlogEditable
                 content={content}
                 title={title}
                 onContentChange={setContent}
                 onTitleChange={setTitle}
+            />
+            <Button
+                onClick={update}
+                disabled={updating}
+                label={updating ? 'Updating' : 'Update'}
             />
         </div>
     );
