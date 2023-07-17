@@ -12,7 +12,6 @@ import {
     QueryDocumentSnapshot,
     updateDoc,
     doc,
-    where,
     getDoc,
     deleteDoc,
 } from 'firebase/firestore/lite';
@@ -26,6 +25,15 @@ export const getBlogs = cache(async () => {
     )
         .then((temp) => temp.docs.map((s) => s.data()))
         .catch(() => []);
+});
+
+export const getBlogMap = cache(async () => {
+    const map: { [id: string]: Blog } = {};
+    return await getBlogs().then((blogs) =>
+        blogs
+            .filter((b) => !!b)
+            .reduce((acc, curr) => Object.assign(acc, { [curr.id]: curr }), map)
+    );
 });
 
 export const getBlog = cache(async (id: string) => {

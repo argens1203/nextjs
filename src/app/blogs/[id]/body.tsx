@@ -2,10 +2,16 @@
 
 import { BlogEditable } from '@/components/blog';
 import { editBlog } from '@/firestore/blog';
-import { useState } from 'react';
+import { migrateFromBlog } from '@/firestore/topic';
+import { useCallback, useState } from 'react';
+import { Button } from '../button';
 
 type Props = {
-    blog: { title: string; content: string; id: string };
+    blog: {
+        title: string;
+        content: string;
+        id: string;
+    };
 };
 
 export function BlogPageBody(props: Props) {
@@ -15,6 +21,7 @@ export function BlogPageBody(props: Props) {
     const [title, setTitle] = useState(_title);
     const [content, setContent] = useState(_content);
     const [updating, setUpdating] = useState(false);
+    const [moving, setMoving] = useState(false);
 
     const update = () => {
         setUpdating(true);
@@ -23,13 +30,27 @@ export function BlogPageBody(props: Props) {
         });
     };
 
+    const moveToTag = useCallback(() => {
+        setMoving(true);
+        migrateFromBlog(id)
+            .catch(console.log)
+            .finally(() => {
+                setMoving(false);
+            });
+    }, []);
+
     return (
         <div>
-            <button className="w-full p-5" onClick={update} disabled={updating}>
-                <div className="bg-black text-white">
-                    {updating ? 'Updating' : 'Update'}
-                </div>
-            </button>
+            <Button
+                onClick={update}
+                disabled={updating}
+                label={updating ? 'Updating' : 'Update'}
+            />
+            <Button
+                onClick={moveToTag}
+                disabled={moving}
+                label={moving ? 'Moving' : 'Move'}
+            />
             <BlogEditable
                 content={content}
                 title={title}

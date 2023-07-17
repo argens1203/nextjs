@@ -33,11 +33,13 @@ export class Blog {
     }
 
     toSerializable() {
-        const { id, title, content } = this;
+        const { id, title, content, createdAt, lastUpdatedAt } = this;
         return {
             id,
             title,
             content,
+            createdAt: createdAt.toJSDate(),
+            lastUpdatedAt: lastUpdatedAt.toJSDate(),
         };
     }
 }
